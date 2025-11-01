@@ -39,7 +39,7 @@ export const EventCard = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="cyber-border bg-card/80 backdrop-blur-md p-8 rounded-lg hover:scale-105 transition-all duration-300 relative overflow-hidden">
+        <div className="cyber-border bg-card/80 backdrop-blur-md p-4 rounded-lg hover:scale-105 transition-all duration-300 relative overflow-hidden">
           {/* Background Gradient */}
           <div 
             className={`absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300`}
@@ -52,51 +52,57 @@ export const EventCard = ({
           )}
 
           {/* Target Indicator */}
-          <div className="absolute top-4 right-4 flex items-center gap-2">
-            <Target className="w-5 h-5 text-primary animate-pulse-glow" />
-            <span className="text-xs font-mono text-primary">TARGET</span>
+          <div className="absolute top-2 right-2 flex items-center gap-1">
+            <Target className="w-4 h-4 text-primary animate-pulse-glow" />
+            <span className="text-[10px] font-mono text-primary">TARGET</span>
           </div>
 
           <div className="relative z-10">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="p-3 bg-primary/20 rounded-lg glow-primary">
+            <div className="flex items-start gap-3 mb-3">
+              <div className="p-2 bg-primary/20 rounded-lg glow-primary">
                 {icon}
               </div>
               <div className="flex-1">
-                <h3 className="text-2xl font-bold mb-2 text-glow">{title}</h3>
-                <p className="text-muted-foreground">{description}</p>
+                <h3 className="text-xl font-bold mb-1 text-glow">{title}</h3>
+                <p className="text-muted-foreground text-sm">{description}</p>
               </div>
             </div>
 
-            <div className="space-y-2 text-sm font-mono">
+            <div className="space-y-1.5 text-xs font-mono">
               <div className="flex items-center gap-2 text-primary">
-                <Calendar className="w-4 h-4" />
+                <Calendar className="w-3 h-3" />
                 <span>{date}</span>
               </div>
               <div className="flex items-center gap-2 text-secondary">
-                <Clock className="w-4 h-4" />
+                <Clock className="w-3 h-3" />
                 <span>{time}</span>
               </div>
               <div className="flex items-center gap-2 text-accent">
-                <MapPin className="w-4 h-4" />
+                <MapPin className="w-3 h-3" />
                 <span>{venue}</span>
               </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-between">
+            <div className="mt-4 flex items-center gap-3">
               <Button 
                 variant="outline" 
-                className="cyber-border bg-primary/10 hover:bg-primary/20 text-primary font-mono"
+                className="flex-1 cyber-border bg-primary/10 hover:bg-primary/20 text-primary font-mono text-sm"
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsOpen(true);
                 }}
               >
-                ACQUIRE TARGET
+                DETAILS
               </Button>
-              <div className="text-xs font-mono text-muted-foreground">
-                CLICK TO ENGAGE
-              </div>
+              <Button 
+                className="flex-1 cyber-border bg-secondary/90 hover:bg-secondary text-secondary-foreground font-mono text-sm glow-secondary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open('https://forms.google.com', '_blank');
+                }}
+              >
+                REGISTER
+              </Button>
             </div>
           </div>
         </div>

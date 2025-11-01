@@ -41,27 +41,27 @@ export const CountdownTimer = () => {
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center">
       <div className="relative">
-        <div className="cyber-border bg-card/50 backdrop-blur-sm px-6 py-4 rounded min-w-[100px] text-center">
-          <div className="text-4xl md:text-6xl font-bold text-glow tabular-nums">
+        <div className="cyber-border bg-card/50 backdrop-blur-sm px-3 py-2 rounded min-w-[60px] text-center">
+          <div className="text-2xl md:text-3xl font-bold text-glow tabular-nums">
             {value.toString().padStart(2, "0")}
           </div>
         </div>
         <div className="absolute -inset-1 cyber-border rounded opacity-50 animate-pulse-glow" />
       </div>
-      <div className="text-sm md:text-base text-muted-foreground mt-2 font-mono uppercase tracking-wider">
+      <div className="text-[10px] md:text-xs text-muted-foreground mt-1 font-mono uppercase tracking-wider">
         {label}
       </div>
     </div>
   );
 
   return (
-    <div className="flex flex-wrap gap-4 md:gap-8 justify-center items-center">
+    <div className="flex flex-wrap gap-2 md:gap-4 justify-center items-center">
       <TimeUnit value={timeLeft.days} label="DAYS" />
-      <div className="text-4xl text-primary animate-pulse-glow">:</div>
+      <div className="text-2xl text-primary animate-pulse-glow">:</div>
       <TimeUnit value={timeLeft.hours} label="HOURS" />
-      <div className="text-4xl text-primary animate-pulse-glow">:</div>
+      <div className="text-2xl text-primary animate-pulse-glow">:</div>
       <TimeUnit value={timeLeft.minutes} label="MINUTES" />
-      <div className="text-4xl text-primary animate-pulse-glow">:</div>
+      <div className="text-2xl text-primary animate-pulse-glow">:</div>
       <TimeUnit value={timeLeft.seconds} label="SECONDS" />
     </div>
   );
