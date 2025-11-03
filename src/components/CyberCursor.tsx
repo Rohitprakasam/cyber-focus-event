@@ -24,59 +24,77 @@ export const CyberCursor = () => {
 
   return (
     <>
-      {/* Main Crosshair - Reduced Size */}
+      {/* Orbital Cursor System */}
       <div
         className="fixed pointer-events-none z-[9999] mix-blend-screen transition-transform duration-100"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
-          transform: `translate(-50%, -50%) scale(${isTargeting ? '0.8' : '0.6'})`,
+          transform: `translate(-50%, -50%) scale(${isTargeting ? '1.3' : '1'})`,
         }}
       >
-        {/* Center Dot */}
-        <div className={`absolute inset-0 w-1.5 h-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full ${
+        {/* Center Core */}
+        <div className={`absolute inset-0 w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full ${
           isTargeting ? 'bg-secondary glow-secondary' : 'bg-primary glow-primary'
-        } transition-colors duration-200`} />
+        } transition-all duration-200`} />
         
-        {/* Crosshair Lines */}
-        <div className={`absolute w-5 h-[1px] -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 ${
-          isTargeting ? 'bg-secondary' : 'bg-primary'
-        } transition-colors duration-200`}>
-          <div className="absolute -left-6 top-0 w-4 h-[1px] bg-inherit" />
-          <div className="absolute -right-6 top-0 w-4 h-[1px] bg-inherit" />
-        </div>
-        <div className={`absolute w-[1px] h-5 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 ${
-          isTargeting ? 'bg-secondary' : 'bg-primary'
-        } transition-colors duration-200`}>
-          <div className="absolute left-0 -top-6 w-[1px] h-4 bg-inherit" />
-          <div className="absolute left-0 -bottom-6 w-[1px] h-4 bg-inherit" />
+        {/* Inner Ring */}
+        <div className={`absolute inset-0 -translate-x-1/2 -translate-y-1/2 ${
+          isTargeting ? 'animate-spin-slow' : ''
+        }`}>
+          <div className={`w-8 h-8 border ${
+            isTargeting ? 'border-secondary' : 'border-primary/50'
+          } rounded-full transition-colors duration-200`} 
+               style={{ borderStyle: 'dashed', borderWidth: '1px' }} />
         </div>
 
-        {/* Targeting Ring */}
+        {/* Outer Ring */}
+        <div className={`absolute inset-0 -translate-x-1/2 -translate-y-1/2 ${
+          isTargeting ? 'opacity-100' : 'opacity-40'
+        } transition-opacity duration-200`}>
+          <div className={`w-12 h-12 border ${
+            isTargeting ? 'border-secondary/60' : 'border-primary/30'
+          } rounded-full transition-colors duration-200`} />
+        </div>
+
+        {/* Orbital Particles */}
+        {[0, 90, 180, 270].map((rotation, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 -translate-x-1/2 -translate-y-1/2 ${
+              isTargeting ? 'animate-spin' : ''
+            }`}
+            style={{
+              transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
+              animationDuration: '3s',
+              animationDelay: `${index * 0.2}s`
+            }}
+          >
+            <div 
+              className={`absolute w-1 h-1 rounded-full ${
+                isTargeting ? 'bg-secondary' : 'bg-primary'
+              } transition-colors duration-200`}
+              style={{
+                top: '50%',
+                left: 'calc(50% + 20px)',
+                transform: 'translate(-50%, -50%)',
+                boxShadow: isTargeting 
+                  ? '0 0 8px hsl(var(--secondary))' 
+                  : '0 0 6px hsl(var(--primary))'
+              }}
+            />
+          </div>
+        ))}
+
+        {/* Targeting Corners */}
         {isTargeting && (
-          <div className="absolute inset-0 -translate-x-1/2 -translate-y-1/2 animate-target-lock">
-            <div className="w-8 h-8 border border-secondary rounded-full" 
-                 style={{ boxShadow: '0 0 10px hsl(var(--secondary) / 0.5)' }} />
+          <div className="absolute w-16 h-16 -translate-x-1/2 -translate-y-1/2 animate-pulse">
+            <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-secondary" />
+            <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-secondary" />
+            <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-secondary" />
+            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-secondary" />
           </div>
         )}
-
-        {/* Corner Brackets */}
-        <div className={`absolute w-4 h-4 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 ${
-          isTargeting ? 'opacity-100' : 'opacity-50'
-        } transition-all duration-200`}>
-          <div className={`absolute top-0 left-0 w-2 h-2 border-t border-l ${
-            isTargeting ? 'border-secondary' : 'border-primary'
-          }`} />
-          <div className={`absolute top-0 right-0 w-2 h-2 border-t border-r ${
-            isTargeting ? 'border-secondary' : 'border-primary'
-          }`} />
-          <div className={`absolute bottom-0 left-0 w-2 h-2 border-b border-l ${
-            isTargeting ? 'border-secondary' : 'border-primary'
-          }`} />
-          <div className={`absolute bottom-0 right-0 w-2 h-2 border-b border-r ${
-            isTargeting ? 'border-secondary' : 'border-primary'
-          }`} />
-        </div>
       </div>
     </>
   );

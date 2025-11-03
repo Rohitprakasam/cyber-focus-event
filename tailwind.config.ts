@@ -107,6 +107,10 @@ export default {
             opacity: "1"
           },
         },
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -115,6 +119,7 @@ export default {
         "scan": "scan 3s linear infinite",
         "glitch": "glitch 0.3s ease-in-out",
         "target-lock": "target-lock 0.5s ease-out",
+        "spin-slow": "spin-slow 8s linear infinite",
       },
     },
   },
