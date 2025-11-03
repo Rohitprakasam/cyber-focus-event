@@ -2,20 +2,24 @@ import { useEffect, useState } from "react";
 
 export const CyberCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isTargeting, setIsTargeting] = useState(false);
+  const [targetBox, setTargetBox] = useState<DOMRect | null>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
       
       const target = e.target as HTMLElement;
-      const isInteractive = 
+      const interactiveElement = 
         target.closest('button') || 
         target.closest('a') || 
         target.closest('[role="button"]') ||
         target.closest('.event-card');
       
-      setIsTargeting(!!isInteractive);
+      if (interactiveElement) {
+        setTargetBox(interactiveElement.getBoundingClientRect());
+      } else {
+        setTargetBox(null);
+      }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -24,78 +28,45 @@ export const CyberCursor = () => {
 
   return (
     <>
-      {/* Orbital Cursor System */}
+      {/* Main Cursor Dot */}
       <div
-        className="fixed pointer-events-none z-[9999] mix-blend-screen transition-transform duration-100"
+        className="fixed pointer-events-none z-[9999] mix-blend-screen transition-all duration-150"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
-          transform: `translate(-50%, -50%) scale(${isTargeting ? '1.3' : '1'})`,
+          transform: 'translate(-50%, -50%)',
         }}
       >
-        {/* Center Core */}
-        <div className={`absolute inset-0 w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full ${
-          isTargeting ? 'bg-secondary glow-secondary' : 'bg-primary glow-primary'
+        <div className={`w-1.5 h-1.5 rounded-full ${
+          targetBox ? 'bg-secondary glow-secondary' : 'bg-primary glow-primary'
         } transition-all duration-200`} />
-        
-        {/* Inner Ring */}
-        <div className={`absolute inset-0 -translate-x-1/2 -translate-y-1/2 ${
-          isTargeting ? 'animate-spin-slow' : ''
-        }`}>
-          <div className={`w-8 h-8 border ${
-            isTargeting ? 'border-secondary' : 'border-primary/50'
-          } rounded-full transition-colors duration-200`} 
-               style={{ borderStyle: 'dashed', borderWidth: '1px' }} />
-        </div>
-
-        {/* Outer Ring */}
-        <div className={`absolute inset-0 -translate-x-1/2 -translate-y-1/2 ${
-          isTargeting ? 'opacity-100' : 'opacity-40'
-        } transition-opacity duration-200`}>
-          <div className={`w-12 h-12 border ${
-            isTargeting ? 'border-secondary/60' : 'border-primary/30'
-          } rounded-full transition-colors duration-200`} />
-        </div>
-
-        {/* Orbital Particles */}
-        {[0, 90, 180, 270].map((rotation, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 -translate-x-1/2 -translate-y-1/2 ${
-              isTargeting ? 'animate-spin' : ''
-            }`}
-            style={{
-              transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
-              animationDuration: '3s',
-              animationDelay: `${index * 0.2}s`
-            }}
-          >
-            <div 
-              className={`absolute w-1 h-1 rounded-full ${
-                isTargeting ? 'bg-secondary' : 'bg-primary'
-              } transition-colors duration-200`}
-              style={{
-                top: '50%',
-                left: 'calc(50% + 20px)',
-                transform: 'translate(-50%, -50%)',
-                boxShadow: isTargeting 
-                  ? '0 0 8px hsl(var(--secondary))' 
-                  : '0 0 6px hsl(var(--primary))'
-              }}
-            />
-          </div>
-        ))}
-
-        {/* Targeting Corners */}
-        {isTargeting && (
-          <div className="absolute w-16 h-16 -translate-x-1/2 -translate-y-1/2 animate-pulse">
-            <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-secondary" />
-            <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-secondary" />
-            <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-secondary" />
-            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-secondary" />
-          </div>
-        )}
       </div>
+
+      {/* Box Outline - Snaps to hovered elements */}
+      {targetBox && (
+        <div
+          className="fixed pointer-events-none z-[9998] border-2 border-secondary transition-all duration-200 ease-out"
+          style={{
+            left: `${targetBox.left}px`,
+            top: `${targetBox.top}px`,
+            width: `${targetBox.width}px`,
+            height: `${targetBox.height}px`,
+            boxShadow: '0 0 20px hsl(var(--secondary) / 0.4), inset 0 0 20px hsl(var(--secondary) / 0.1)',
+          }}
+        >
+          {/* Corner Indicators */}
+          <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-secondary" />
+          <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-secondary" />
+          <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-secondary" />
+          <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-secondary" />
+          
+          {/* Scanning Line */}
+          <div 
+            className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-secondary to-transparent animate-scan opacity-50"
+            style={{ top: '50%' }}
+          />
+        </div>
+      )}
     </>
   );
 };
